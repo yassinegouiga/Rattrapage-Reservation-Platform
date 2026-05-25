@@ -33,6 +33,7 @@ public class SalleService {
         existing.setNom(updatedSalle.getNom());
         existing.setCapacite(updatedSalle.getCapacite());
         existing.setEquipements(updatedSalle.getEquipements());
+        existing.setEstDisponible(updatedSalle.isEstDisponible());
         return salleRepository.save(existing);
     }
 }

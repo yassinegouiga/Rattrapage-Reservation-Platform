@@ -22,6 +22,9 @@ public class Salle {
 
     private String equipements;
 
+    @Column(columnDefinition = "boolean default true")
+    private boolean estDisponible = true;
+
     @OneToMany(mappedBy = "salle")
     @com.fasterxml.jackson.annotation.JsonIgnore
     private java.util.List<Reservation> reservations;

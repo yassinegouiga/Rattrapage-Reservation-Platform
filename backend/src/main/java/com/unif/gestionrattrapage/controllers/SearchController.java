@@ -33,6 +33,9 @@ public class SearchController {
         List<Salle> allRooms = salleRepository.findAll();
         
         return allRooms.stream().filter(salle -> {
+            if (!salle.isEstDisponible()) {
+                return false;
+            }
             boolean hasConflict = reservationRepository.existsConflict(salle.getId(), date, heureDebut, heureFin);
             return !hasConflict;
         }).collect(Collectors.toList());
