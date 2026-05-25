@@ -38,11 +38,11 @@ public class DatabaseSeeder implements CommandLineRunner {
             roleRepository.save(r2);
         }
 
-        // Création d'un administrateur par défaut si aucun n'existe
-        if (!userRepository.existsByEmail("admin@universite.edu")) {
+        // Création d'un administrateur par défaut        // --- ADMIN ---
+        if (!userRepository.existsByEmail("admin@uca.ac.ma")) {
             User admin = new User();
             admin.setNomComplet("Administrateur Principal");
-            admin.setEmail("admin@universite.edu");
+            admin.setEmail("admin@uca.ac.ma");
             admin.setPassword(passwordEncoder.encode("password123"));
             
             Set<Role> roles = new HashSet<>();
@@ -52,7 +52,7 @@ public class DatabaseSeeder implements CommandLineRunner {
             
             admin.setRoles(roles);
             userRepository.save(admin);
-            System.out.println("Compte admin par défaut créé ! (Email: admin@universite.edu / MDP: password123)");
+            System.out.println("Compte admin par défaut créé ! (Email: admin@uca.ac.ma / MDP: password123)");
         }
     }
 }

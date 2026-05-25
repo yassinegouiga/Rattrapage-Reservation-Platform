@@ -13,9 +13,10 @@ import java.util.Date;
 @Component
 public class JwtUtils {
 
-    // Clé secrète super sécurisée pour signer le token (normalement, on la met dans application.properties)
-    // Nous utilisons Keys.secretKeyFor pour générer une clé sûre de la bonne taille pour HS512.
-    private final Key jwtSecretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    // Clé secrète super sécurisée et FIXE pour signer le token
+    // (évite que les tokens deviennent invalides à chaque redémarrage du backend)
+    private final String jwtSecret = "UniversiteCadiAyyadSecretKeyPourLaGestionDesRattrapages2026SuperSecurisee512BitsLongueurMinimaleRequise";
+    private final Key jwtSecretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes());
 
     // Durée de validité du token (ex: 24 heures)
     private final int jwtExpirationMs = 86400000;
