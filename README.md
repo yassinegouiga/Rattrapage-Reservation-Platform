@@ -11,7 +11,7 @@ Ce projet consiste à développer une plateforme de réservation et de gestion d
 
 ---
 
-## 2. Ce qui a été réalisé à ce jour (Terminé ✅)
+## 2. Fonctionnalités Réalisées (Terminé ✅)
 
 ### A. Architecture Backend (Spring Boot 3 / Java 17)
 - **Modélisation de la Base de Données (MySQL) :** Création des entités JPA (`User`, `Role`, `Salle`, `Reservation`) avec les relations appropriées (One-to-Many, Many-to-Many).
@@ -37,19 +37,10 @@ Ce projet consiste à développer une plateforme de réservation et de gestion d
   - **Gestion des Professeurs :** Tableau listant les utilisateurs, avec un formulaire (Modal) pour créer de nouveaux professeurs ou administrateurs.
   - **Gestion des Salles :** Affichage sous forme de cartes avec la possibilité de créer des salles, et un bouton pour "Désactiver/Réactiver" une salle (lorsqu'elle est en travaux par exemple).
   - **Supervision :** Tableau listant toutes les réservations avec option d'annulation forcée par l'admin.
-- **Espace Enseignant :** Création d'une "Waiting Page" (page de construction) pour intercepter correctement la connexion d'un professeur avant la fin du développement de cette partie.
-
----
-
-## 3. Ce qui reste à faire (En cours ⏳)
-
-- **Espace Enseignant :**
-  - Affichage des plannings et des salles disponibles selon la date et l'heure.
-  - Implémentation du formulaire de soumission d'une nouvelle réservation (côté React).
-  - Ajout des vérifications côté Backend pour empêcher la réservation d'une salle déjà occupée ou indisponible.
-- **Validation Finale :**
-  - Tester complètement le parcours d'un professeur.
-  - Nettoyer le code et optimiser quelques requêtes éventuelles.
+- **Espace Enseignant (100% Fonctionnel) :**
+  - **Tableau de Bord :** Aperçu des réservations à venir.
+  - **Recherche et Réservation :** Recherche de salles par date et horaires avec vérification de disponibilité en temps réel, puis soumission de réservation.
+  - **Mes Réservations :** Historique des séances avec possibilité d'annuler les séances futures.
 
 ---
 

@@ -51,37 +51,37 @@ const UserManagement = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-8 animate-fade-in-up pb-10">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Professeurs</h1>
-          <p className="text-gray-500 mt-1">Gérer les comptes enseignants</p>
+          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Professeurs</h1>
+          <p className="text-gray-500 mt-2 font-medium">Gérer les comptes enseignants</p>
         </div>
         <button 
           onClick={() => setShowModal(true)}
-          className="flex items-center px-4 py-2 bg-uca-green text-white rounded-lg hover:bg-uca-light-green shadow-md transition-colors"
+          className="flex items-center px-5 py-3 bg-gradient-to-r from-uca-green to-uca-light-green text-white rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all whitespace-nowrap font-semibold"
         >
           <UserPlus size={18} className="mr-2" />
           Nouveau Professeur
         </button>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-premium border border-white/50 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-gray-100">
+            <thead className="bg-gray-50/50">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Nom Complet</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Email</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Rôle</th>
-                <th className="px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Nom Complet</th>
+                <th className="px-6 py-5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Email</th>
+                <th className="px-6 py-5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Rôle</th>
+                <th className="px-6 py-5 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="divide-y divide-gray-100/50">
               {loading ? (
-                <tr><td colSpan="4" className="text-center py-10">Chargement...</td></tr>
+                <tr><td colSpan="4" className="text-center py-10 font-medium text-gray-500">Chargement...</td></tr>
               ) : users.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-50 transition-colors">
+                <tr key={user.id} className="hover:bg-white/60 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10 bg-gray-100 rounded-full flex items-center justify-center text-gray-500">
@@ -119,14 +119,13 @@ const UserManagement = () => {
         </div>
       </div>
 
-      {/* Modal Ajout Utilisateur */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden animate-fade-in-up">
-            <div className="flex justify-between items-center p-6 border-b border-gray-100">
-              <h3 className="text-xl font-bold text-gray-900">Ajouter un professeur</h3>
-              <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
-                <X size={24} />
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl max-w-md w-full overflow-hidden animate-fade-in-up border border-white/50">
+            <div className="flex justify-between items-center p-6 border-b border-gray-100/50">
+              <h3 className="text-xl font-extrabold text-gray-900">Ajouter un professeur</h3>
+              <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600 transition-colors bg-gray-100 hover:bg-gray-200 rounded-full p-1">
+                <X size={20} />
               </button>
             </div>
             
@@ -176,18 +175,18 @@ const UserManagement = () => {
                 </select>
               </div>
 
-              <div className="pt-4 flex justify-end space-x-3">
+              <div className="pt-4 flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3">
                 <button 
                   type="button" 
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="w-full sm:w-auto px-5 py-2.5 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-medium"
                 >
                   Annuler
                 </button>
                 <button 
                   type="submit" 
                   disabled={isSubmitting}
-                  className="px-4 py-2 bg-uca-green text-white rounded-lg hover:bg-uca-light-green transition-colors disabled:opacity-50"
+                  className="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-uca-green to-uca-light-green text-white rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all font-semibold disabled:opacity-50 disabled:transform-none"
                 >
                   {isSubmitting ? 'Création...' : 'Créer le compte'}
                 </button>

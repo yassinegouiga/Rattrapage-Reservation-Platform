@@ -8,6 +8,8 @@ import UserManagement from './pages/admin/UserManagement';
 import RoomManagement from './pages/admin/RoomManagement';
 import ReservationSupervision from './pages/admin/ReservationSupervision';
 import TeacherDashboard from './pages/teacher/TeacherDashboard';
+import BookRoom from './pages/teacher/BookRoom';
+import MyReservations from './pages/teacher/MyReservations';
 
 function App() {
   return (
@@ -35,13 +37,18 @@ function App() {
           
           {/* Route Enseignant */}
           <Route 
-            path="/teacher/dashboard" 
+            path="/teacher" 
             element={
               <ProtectedRoute requiredRole="ROLE_ENSEIGNANT">
-                <TeacherDashboard />
+                <Layout />
               </ProtectedRoute>
-            } 
-          />
+            }
+          >
+            <Route index element={<Navigate to="/teacher/dashboard" replace />} />
+            <Route path="dashboard" element={<TeacherDashboard />} />
+            <Route path="book" element={<BookRoom />} />
+            <Route path="reservations" element={<MyReservations />} />
+          </Route>
         </Routes>
       </Router>
     </AuthProvider>

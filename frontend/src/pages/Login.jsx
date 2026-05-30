@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { Mail, Lock, ArrowRight } from 'lucide-react';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -19,10 +20,7 @@ const Login = () => {
 
     try {
       const data = await login(email, password);
-      
-      // Si l'utilisateur cherchait à atteindre une page spécifique avant d'être redirigé vers le login
       const from = location.state?.from?.pathname || (data.roles.includes('ROLE_ADMIN') ? '/admin/dashboard' : '/teacher/dashboard');
-      
       navigate(from, { replace: true });
     } catch (err) {
       setError(err.response?.data?.message || 'Identifiants incorrects. Veuillez réessayer.');
@@ -32,46 +30,59 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-uca-gray flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="flex justify-center">
-          {/* Logo Placeholder (ou texte stylisé) */}
-          <div className="h-20 w-20 bg-white rounded-full flex items-center justify-center shadow-lg border-4 border-uca-green overflow-hidden">
-             <span className="text-uca-green font-bold text-2xl">UCA</span>
-          </div>
-        </div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Gestion des Rattrapages
-        </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Faculté des Sciences Semlalia - Marrakech
-        </p>
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-uca-gray">
+      {/* Background décoratif */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-uca-green rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-uca-light-green rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-40 left-1/2 w-96 h-96 bg-uca-brown rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow-xl sm:rounded-xl sm:px-10 border border-gray-100">
+      <div className="relative z-10 w-full max-w-md px-4 sm:px-0">
+        <div className="bg-white/80 backdrop-blur-xl shadow-premium rounded-3xl p-8 sm:p-12 border border-white/50">
           
+          <div className="text-center mb-10">
+            {/* Logo UCA */}
+            <div className="flex justify-center mb-6">
+              <div className="h-32 w-32 bg-white rounded-2xl shadow-md p-3 flex items-center justify-center transform rotate-3 hover:rotate-0 transition-transform duration-300">
+                <img 
+                  src="/logo-uca.png" 
+                  alt="Logo UCA" 
+                  className="max-h-full object-contain"
+                  onError={(e) => {
+                    e.target.onerror = null; 
+                    e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="%23248f43" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>';
+                  }}
+                />
+              </div>
+            </div>
+            <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+              Gestion Rattrapages
+            </h2>
+            <p className="mt-3 text-sm text-gray-500 font-medium">
+              Faculté des Sciences Semlalia - Marrakech
+            </p>
+          </div>
+
           {error && (
-            <div className="mb-4 bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
-              <div className="flex">
-                <div className="flex-shrink-0">
-                  <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                  </svg>
-                </div>
+            <div className="mb-6 bg-red-50/80 backdrop-blur-sm border-l-4 border-red-500 p-4 rounded-r-lg animate-fade-in-up">
+              <div className="flex items-center">
                 <div className="ml-3">
-                  <p className="text-sm text-red-700">{error}</p>
+                  <p className="text-sm font-medium text-red-800">{error}</p>
                 </div>
               </div>
             </div>
           )}
 
           <form className="space-y-6" onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <div className="space-y-1">
+              <label htmlFor="email" className="block text-sm font-semibold text-gray-700">
                 Adresse Email
               </label>
-              <div className="mt-1">
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-focus-within:text-uca-green transition-colors">
+                  <Mail size={18} />
+                </div>
                 <input
                   id="email"
                   name="email"
@@ -80,17 +91,20 @@ const Login = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-uca-green focus:border-transparent transition-colors"
+                  className="w-full pl-10 pr-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-uca-green focus:bg-white transition-all duration-200"
                   placeholder="prenom.nom@uca.ac.ma"
                 />
               </div>
             </div>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <div className="space-y-1">
+              <label htmlFor="password" className="block text-sm font-semibold text-gray-700">
                 Mot de passe
               </label>
-              <div className="mt-1">
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 group-focus-within:text-uca-green transition-colors">
+                  <Lock size={18} />
+                </div>
                 <input
                   id="password"
                   name="password"
@@ -99,26 +113,38 @@ const Login = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-uca-green focus:border-uca-green sm:text-sm transition duration-150 ease-in-out"
+                  className="w-full pl-10 pr-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-uca-green focus:bg-white transition-all duration-200"
+                  placeholder="••••••••"
                 />
               </div>
             </div>
 
-            <div>
+            <div className="pt-2">
               <button
                 type="submit"
                 disabled={isLoading}
-                className={`w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-uca-green hover:bg-uca-light-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-uca-green transition duration-150 ease-in-out ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                className="group relative w-full flex justify-center py-3.5 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-gradient-to-r from-uca-green to-uca-light-green hover:from-uca-light-green hover:to-uca-green shadow-lg shadow-uca-green/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-uca-green transition-all duration-300 transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
               >
                 {isLoading ? (
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                ) : 'Se connecter'}
+                ) : (
+                  <div className="flex items-center">
+                    Se connecter
+                    <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                )}
               </button>
             </div>
           </form>
+          
+          <div className="mt-8 text-center">
+            <p className="text-xs text-gray-400">
+              © {new Date().getFullYear()} Université Cadi Ayyad. Tous droits réservés.
+            </p>
+          </div>
         </div>
       </div>
     </div>

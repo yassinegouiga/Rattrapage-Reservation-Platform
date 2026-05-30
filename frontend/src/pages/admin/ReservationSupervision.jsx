@@ -32,38 +32,37 @@ const ReservationSupervision = () => {
     }
   };
 
-  // Helper to format date
   const formatDate = (dateString) => {
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString('fr-FR', options);
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 animate-fade-in-up pb-10">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Supervision des Réservations</h1>
-        <p className="text-gray-500 mt-1">Consultez ou annulez les réservations de l'université</p>
+        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Supervision des Réservations</h1>
+        <p className="text-gray-500 mt-2 font-medium">Consultez ou annulez les réservations de l'université</p>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-premium border border-white/50 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-gray-100">
+            <thead className="bg-gray-50/50">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date & Heure</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Salle</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Enseignant</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Motif</th>
-                <th className="px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Action</th>
+                <th className="px-6 py-5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Date & Heure</th>
+                <th className="px-6 py-5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Salle</th>
+                <th className="px-6 py-5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Enseignant</th>
+                <th className="px-6 py-5 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Motif</th>
+                <th className="px-6 py-5 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">Action</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="divide-y divide-gray-100/50">
               {loading ? (
-                <tr><td colSpan="5" className="text-center py-10">Chargement...</td></tr>
+                <tr><td colSpan="5" className="text-center py-10 font-medium text-gray-500">Chargement...</td></tr>
               ) : reservations.length === 0 ? (
                 <tr><td colSpan="5" className="text-center py-10 text-gray-500">Aucune réservation pour le moment.</td></tr>
               ) : reservations.map((res) => (
-                <tr key={res.id} className="hover:bg-gray-50 transition-colors">
+                <tr key={res.id} className="hover:bg-white/60 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex flex-col">
                       <span className="text-sm font-medium text-gray-900 flex items-center">
@@ -96,9 +95,9 @@ const ReservationSupervision = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button 
                       onClick={() => handleDelete(res.id)}
-                      className="text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1 rounded-md border border-red-200 transition-colors flex items-center ml-auto"
+                      className="text-red-500 hover:text-white hover:bg-red-500 px-4 py-2 rounded-xl border border-red-200 hover:border-transparent transition-all flex items-center ml-auto font-medium shadow-sm hover:shadow-md"
                     >
-                      <Trash2 size={14} className="mr-1" /> Annuler
+                      <Trash2 size={16} className="mr-1.5" /> Annuler
                     </button>
                   </td>
                 </tr>

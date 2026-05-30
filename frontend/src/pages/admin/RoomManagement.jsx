@@ -4,6 +4,8 @@ import { Trash2, Plus, Monitor, Power, PowerOff, X } from 'lucide-react';
 
 const RoomManagement = () => {
   const [rooms, setRooms] = useState([]);
+  const [reservations, setReservations] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [newRoom, setNewRoom] = useState({ nom: '', capacite: 30, equipements: '', estDisponible: true });
@@ -11,8 +13,12 @@ const RoomManagement = () => {
 
   const fetchRooms = async () => {
     try {
-      const data = await adminService.getAllRooms();
-      setRooms(data);
+      const [roomsData, resData] = await Promise.all([
+        adminService.getAllRooms(),
+        adminService.getAllReservations()
+      ]);
+      setRooms(roomsData);
+      setReservations(resData);
     } catch (error) {
       console.error("Erreur:", error);
     } finally {
@@ -61,33 +67,50 @@ const RoomManagement = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
+    <div className="space-y-8 animate-fade-in-up pb-10">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Salles</h1>
-          <p className="text-gray-500 mt-1">Gérer les salles et leur disponibilité</p>
+          <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Salles</h1>
+          <p className="text-gray-500 mt-2 font-medium">Gérer les salles et leur disponibilité</p>
         </div>
-        <button 
-          onClick={() => setShowModal(true)}
-          className="flex items-center px-4 py-2 bg-uca-brown text-white rounded-lg hover:bg-uca-light-brown shadow-md transition-colors"
-        >
-          <Plus size={18} className="mr-2" />
-          Nouvelle Salle
-        </button>
+        
+        <div className="flex w-full md:w-auto items-center space-x-3">
+          <div className="relative w-full md:w-64">
+            <input 
+              type="text" 
+              placeholder="Rechercher une salle..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full px-4 py-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-uca-green shadow-sm transition-all"
+            />
+          </div>
+          <button 
+            onClick={() => setShowModal(true)}
+            className="flex items-center px-5 py-3 bg-gradient-to-r from-uca-green to-uca-light-green text-white rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all whitespace-nowrap font-semibold"
+          >
+            <Plus size={18} className="mr-2" />
+            Nouvelle Salle
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {loading ? (
           <p>Chargement...</p>
-        ) : rooms.map((room) => (
-          <div key={room.id} className={`bg-white rounded-xl shadow-sm border ${room.estDisponible ? 'border-gray-100' : 'border-red-200 bg-red-50'} overflow-hidden transition-all duration-200 hover:shadow-md`}>
+        ) : rooms
+          .filter(room => 
+            room.nom.toLowerCase().includes(searchQuery.toLowerCase()) || 
+            (room.equipements && room.equipements.toLowerCase().includes(searchQuery.toLowerCase()))
+          )
+          .map((room) => (
+          <div key={room.id} className={`bg-white/80 backdrop-blur-xl rounded-2xl shadow-premium border ${room.estDisponible ? 'border-white/50' : 'border-red-200/50 bg-red-50/50'} overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group`}>
             <div className="p-6">
               <div className="flex justify-between items-start">
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900">{room.nom}</h3>
-                  <p className="text-sm text-gray-500 mt-1">Capacité: {room.capacite} places</p>
+                  <h3 className="text-xl font-extrabold text-gray-900">{room.nom}</h3>
+                  <p className="text-sm text-gray-500 mt-1 font-medium">Capacité: {room.capacite} places</p>
                 </div>
-                <div className={`px-2 py-1 rounded text-xs font-bold ${room.estDisponible ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                <div className={`px-3 py-1 rounded-full text-xs font-bold shadow-sm ${room.estDisponible ? 'bg-green-100 text-green-700 border border-green-200' : 'bg-red-100 text-red-700 border border-red-200'}`}>
                   {room.estDisponible ? 'DISPONIBLE' : 'HORS SERVICE'}
                 </div>
               </div>
@@ -96,6 +119,22 @@ const RoomManagement = () => {
                 <div className="flex items-center text-sm text-gray-600 mb-4">
                   <Monitor size={16} className="mr-2 text-gray-400" />
                   {room.equipements}
+                </div>
+
+                <div className="mt-4 pt-4 border-t border-gray-50">
+                  <h4 className="text-sm font-semibold text-gray-700 mb-2">Séances à venir :</h4>
+                  {reservations
+                    .filter(res => res.salle.id === room.id && new Date(`${res.dateRes}T${res.heureDebut}`) >= new Date())
+                    .sort((a, b) => new Date(`${a.dateRes}T${a.heureDebut}`) - new Date(`${b.dateRes}T${b.heureDebut}`))
+                    .map((res, idx) => (
+                      <div key={res.id} className="text-xs bg-gray-50 p-2 rounded mb-1 text-gray-600">
+                        <strong>{res.dateRes}</strong> de {res.heureDebut} à {res.heureFin}
+                      </div>
+                    ))
+                    .slice(0, 3)} {/* Show only next 3 to avoid making the card too huge */}
+                  {reservations.filter(res => res.salle.id === room.id && new Date(`${res.dateRes}T${res.heureDebut}`) >= new Date()).length === 0 && (
+                    <p className="text-xs text-gray-400 italic">Aucune séance prévue</p>
+                  )}
                 </div>
                 
                 <div className="flex justify-between items-center mt-6">
@@ -119,12 +158,11 @@ const RoomManagement = () => {
         ))}
       </div>
 
-      {/* Modal Ajout Salle */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden animate-fade-in-up">
-            <div className="flex justify-between items-center p-6 border-b border-gray-100">
-              <h3 className="text-xl font-bold text-gray-900">Ajouter une salle</h3>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl max-w-md w-full overflow-hidden animate-fade-in-up border border-white/50">
+            <div className="flex justify-between items-center p-6 border-b border-gray-100/50">
+              <h3 className="text-xl font-extrabold text-gray-900">Ajouter une salle</h3>
               <button onClick={() => setShowModal(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
                 <X size={24} />
               </button>
@@ -163,18 +201,18 @@ const RoomManagement = () => {
                 />
               </div>
 
-              <div className="pt-4 flex justify-end space-x-3">
+              <div className="pt-4 flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3">
                 <button 
                   type="button" 
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="w-full sm:w-auto px-5 py-2.5 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-medium"
                 >
                   Annuler
                 </button>
                 <button 
                   type="submit" 
                   disabled={isSubmitting}
-                  className="px-4 py-2 bg-uca-brown text-white rounded-lg hover:bg-uca-light-brown transition-colors disabled:opacity-50"
+                  className="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-uca-green to-uca-light-green text-white rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all font-semibold disabled:opacity-50 disabled:transform-none"
                 >
                   {isSubmitting ? 'Création...' : 'Créer la salle'}
                 </button>
