@@ -1,4 +1,4 @@
-# État d'Avancement - Projet Spring/React : Plateforme de Gestion des Rattrapages 🎓
+# Plateforme de Gestion des Rattrapages 🎓
 
 **Encadré par :** Pr. Aatila & Pr. Jarir  
 **Réalisé par :** Yassine Gouiga, Karimane Mouhcine, Id Omar Oussama  
@@ -11,7 +11,7 @@ Ce projet consiste à développer une plateforme de réservation et de gestion d
 
 ---
 
-## 2. Fonctionnalités Réalisées (Terminé ✅)
+## 2. Fonctionnalités de l'Application
 
 ### A. Architecture Backend (Spring Boot 3 / Java 17)
 - **Modélisation de la Base de Données (MySQL) :** Création des entités JPA (`User`, `Role`, `Salle`, `Reservation`) avec les relations appropriées (One-to-Many, Many-to-Many).
@@ -44,7 +44,14 @@ Ce projet consiste à développer une plateforme de réservation et de gestion d
 
 ---
 
-## 4. Instructions pour tester l'application en local
+## 3. Instructions pour lancer l'application en local
+
+### Prérequis (Base de données)
+Avant de lancer le Backend, assurez-vous d'avoir démarré votre serveur MySQL (via XAMPP, WAMP, ou Docker) et de créer la base de données :
+```sql
+CREATE DATABASE rattrapage_db;
+```
+*(Le nom de la base de données doit correspondre à celui configuré dans `application.properties`)*
 
 ### Démarrage du Backend
 ```bash
